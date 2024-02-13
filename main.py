@@ -86,6 +86,7 @@ cell = Cell(top_left,bottom_right)
 
 win = MainWindow(800, 600)
 
+# graphing
 top_list = []
 bottom_list = []
 row = 10
