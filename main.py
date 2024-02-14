@@ -11,14 +11,14 @@ class MainWindow:
         self.isRunning = False
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
 
-    def reDraw(self):
+    def redraw(self):
         self.__root.update_idletasks()
         self.__root.update()
 
     def wait_for_close(self):
         self.isRunning = True
         while self.isRunning:
-            self.reDraw()
+            self.redraw()
 
     def close(self):
         self.isRunning = False
@@ -35,13 +35,15 @@ class Point:
         self.x = x
         self.y = y
 
-class Line:
+
+class line:
     def __init__(self, point1, point2):
         self._point1 = point1
         self._point2 = point2
 
     def draw(self, canvas, fill_colour):
         canvas.create_line(self._point1.x, self._point1.y, self._point2.x, self._point2.y, fill=fill_colour, width=2)
+
 
 class Cell:
     def __init__(self, p1, p2, window):
@@ -59,9 +61,9 @@ class Cell:
         self_center = Point((self._x1 + self._x2) / 2, (self._y1 + self._y2) / 2)
         new_center = Point((to_cell._x1 + to_cell._x2) / 2, (to_cell._y1 + to_cell._y2) / 2)
         if undo:
-            self._win.draw_line(Line(self_center, new_center), "grey")
+            self._win.draw_line(line(self_center, new_center), "grey")
         else:
-            self._win.draw_line(Line(self_center, new_center), "red")
+            self._win.draw_line(line(self_center, new_center), "red")
 
     def draw(self, canvas, fill_colour):
         if self.has_left_wall:
@@ -81,10 +83,11 @@ def graph(columns, row):
             bottom_list.append(Point((c * 50) + 50, 100 + (50 * r)))
     return top_list, bottom_list
 
+
 # region static builds Points for objects
 # point1 = Point(75, 75)
 # point2 = Point(125, 75)
-# line = Line(point1, point2)
+# line = line(point1, point2)
 
 # top_left = Point(50,50)
 # bottom_right = Point(100,100)
