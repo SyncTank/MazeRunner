@@ -11,14 +11,14 @@ class MainWindow:
         self.isRunning = False
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
 
-    def redraw(self):
+    def reDraw(self):
         self.__root.update_idletasks()
         self.__root.update()
 
     def wait_for_close(self):
         self.isRunning = True
         while self.isRunning:
-            self.redraw()
+            self.reDraw()
 
     def close(self):
         self.isRunning = False
@@ -36,7 +36,7 @@ class Point:
         self.y = y
 
 
-class line:
+class Line:
     def __init__(self, point1, point2):
         self._point1 = point1
         self._point2 = point2
@@ -61,9 +61,9 @@ class Cell:
         self_center = Point((self._x1 + self._x2) / 2, (self._y1 + self._y2) / 2)
         new_center = Point((to_cell._x1 + to_cell._x2) / 2, (to_cell._y1 + to_cell._y2) / 2)
         if undo:
-            self._win.draw_line(line(self_center, new_center), "grey")
+            self._win.draw_line(Line(self_center, new_center), "grey")
         else:
-            self._win.draw_line(line(self_center, new_center), "red")
+            self._win.draw_line(Line(self_center, new_center), "red")
 
     def draw(self, canvas, fill_colour):
         if self.has_left_wall:
@@ -74,6 +74,28 @@ class Cell:
             canvas.create_line(self._x1, self._y1, self._x2, self._y1, fill=fill_colour, width=2)
         if self.has_bottom_wall:
             canvas.create_line(self._x1, self._y2, self._x2, self._y2, fill=fill_colour, width=2)
+
+
+class Maze:
+    def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, window):
+        self.x1 = x1
+        self.y1 = y1
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+        self.cell_size_x = cell_size_x
+        self.cell_size_y = cell_size_y
+        self.win = window
+        self._cells = []
+        self._create_cells()
+
+        def _create_cells(self):
+            print(self)
+
+        def _draw_cell(self, I, J):
+            print(self)
+
+        def _animate(self):
+            print(self)
 
 
 def graph(columns, row):
@@ -87,7 +109,7 @@ def graph(columns, row):
 # region static builds Points for objects
 # point1 = Point(75, 75)
 # point2 = Point(125, 75)
-# line = line(point1, point2)
+# line = Line(point1, point2)
 
 # top_left = Point(50,50)
 # bottom_right = Point(100,100)
