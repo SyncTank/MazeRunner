@@ -6,8 +6,8 @@ class MainWindow:
     def __init__(self, width, height):
         self.__root = Tk()
         self.__root.title("MazeRunner")
-        self.canvas = Canvas(self.__root, width=width, height=height, background="white")
-        self.canvas.pack(anchor=CENTER, expand=True)
+        self._canvas = Canvas(self.__root, width=width, height=height, background="white")
+        self._canvas.pack(anchor=CENTER, expand=True)
         self.isRunning = False
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
 
@@ -24,10 +24,7 @@ class MainWindow:
         self.isRunning = False
 
     def draw_line(self, line, colour="black"):
-        line.draw(self.canvas, colour)
-
-    def draw_cell(self, cell):
-        cell.draw()
+        line.draw(self._canvas, colour)
 
 
 class Point:

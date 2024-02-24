@@ -2,6 +2,7 @@ from WindowUI import Point, Line
 import random
 import time
 
+
 class Cell:
     def __init__(self, p1, p2, window):
         self.has_left_wall = True
@@ -22,15 +23,15 @@ class Cell:
         else:
             self._win.draw_line(Line(self.cell_center, to_cell.cell_center), "red")
 
-    def draw(self):
+    def draw(self, colour="black"):
         if self.has_left_wall:
-            self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x1, self._y2)), "black")
+            self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x1, self._y2)), colour)
         if self.has_right_wall:
-            self._win.draw_line(Line(Point(self._x2, self._y1), Point(self._x2, self._y2)), "black")
+            self._win.draw_line(Line(Point(self._x2, self._y1), Point(self._x2, self._y2)), colour)
         if self.has_top_wall:
-            self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x2, self._y1)), "black")
+            self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x2, self._y1)), colour)
         if self.has_bottom_wall:
-            self._win.draw_line(Line(Point(self._x1, self._y2), Point(self._x2, self._y2)), "black")
+            self._win.draw_line(Line(Point(self._x1, self._y2), Point(self._x2, self._y2)), colour)
 
 
 class Maze:
@@ -46,42 +47,36 @@ class Maze:
         self.seed = seed  # if not defined it uses system's time
         if self.seed is not None:
             random.seed(self.seed)
+
         self._create_cells()
+        self._break_entrance_and_exit()
 
     def _create_cells(self):
-        for col in range(self.num_cols):
-            for row in range(self.num_rows):
-                firstpoint = Point(self.x1 + col * self.x1, self.y1 + row * self.y1)
 
-                secondpoint = Point((self.x1 * self.cell_size_x + col * self.x1),
-                                    (self.y1 + row * self.y1) + self.cell_size_y * self.y1)
+        for I in range(self.num_cols):
+            col = []
+            for J in range(self.num_rows):
+                point1 = Point(self.x1 + self.x1 * I, self.y1 + self.y1 * J)
+                point2 = Point(self.x1 + self.x1 + self.x1 * I, self.y1 + self.y1 + self.y1 * J)
+                col.append(Cell(point1, point2, self.win))
+                self._draw_cell(col[J])
+            self._cells.append(col)
 
-                self._cells.append(Cell(firstpoint, secondpoint, self.win))
-
-        self._break_entrance_and_exit()
-        self._break_walls_r()
-
-        for c in self._cells:
-            self._draw_cell(c)
-
-    def _draw_cell(self, c):
-        self.win.draw_cell(c)
+    def _draw_cell(self, c, color="black"):
+        c.draw(color)
         self._animate()
 
     def _animate(self):
         self.win.redraw()
-        # time.sleep(0.02)
+        time.sleep(0.02)
 
     def _break_entrance_and_exit(self):
         cells_len = len(self._cells)
-        self._cells[0].has_left_wall = False
-        self._cells[0].has_right_wall = False
-        self._cells[0].has_bottom_wall = False
-        self._cells[cells_len - 1].has_right_wall = False
-        self._cells[cells_len - 1].has_top_wall = False
-        self._cells[cells_len - 1].has_left_wall = False
+        # self._cells[0].has_top_wall = False
+        # self._draw_cell(self._cells[0], "red")
+        # self._cells[cells_len - 1].has_bottom_wall = False
+        # self._draw_cell(self._cells[cells_len - 1], "white")
 
     def _break_walls_r(self):
-        self._cells[0].visited = True
-        for cell in self._cells:
-            print(cell.visited)
+        # self._cells[0].visited = True
+        pass

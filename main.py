@@ -1,6 +1,7 @@
 from WindowUI import MainWindow
 from Maze import Maze
 
+
 # region graph
 # def graph(columns, row):
 #   for c in range(1, columns + 1):
