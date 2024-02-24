@@ -1,4 +1,4 @@
-from main import Maze
+from Maze import Maze
 import unittest
 
 class Tests(unittest.TestCase):
