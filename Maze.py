@@ -56,14 +56,17 @@ class Maze:
         for I in range(self.num_cols):
             col = []
             for J in range(self.num_rows):
-                point1 = Point(self.x1 + self.x1 * I, self.y1 + self.y1 * J)
-                point2 = Point(self.x1 + self.x1 + self.x1 * I, self.y1 + self.y1 + self.y1 * J)
+                point1 = Point((self.x1 + self.x1 * I) * self.cell_size_x,
+                               (self.y1 + self.y1 * J) * self.cell_size_y)
+
+                point2 = Point((self.x1 + self.x1 + self.x1 * I) * self.cell_size_x,
+                               (self.y1 + self.y1 + self.y1 * J) * self.cell_size_y)
                 col.append(Cell(point1, point2, self.win))
                 self._draw_cell(col[J])
             self._cells.append(col)
 
-    def _draw_cell(self, c, color="black"):
-        c.draw(color)
+    def _draw_cell(self, c):
+        c.draw()
         self._animate()
 
     def _animate(self):
