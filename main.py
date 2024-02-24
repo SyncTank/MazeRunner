@@ -97,16 +97,12 @@ class Maze:
             for row in range(self.num_rows):
                 firstpoint = Point(self.x1 + col*self.x1, self.y1 + row*self.y1)
                 secondpoint = Point((self.x1*self.cell_size_x + col*self.x1), (self.y1 + row*self.y1) + self.cell_size_y*self.y1)
-                #print(f"cell : {row} {col} |",firstpoint.x,firstpoint.y, secondpoint.x, secondpoint.y)
                 self._cells.append(Cell(firstpoint, secondpoint, self.win))
 
-        for c in range(len(self._cells)):
-            print(c, len(self._cells))
-            if c == 0:
-                self._cells[c].has_left_wall = self._break_entrance_and_exit(self._cells[c].has_left_wall)
-            if c == len(self._cells)-1:
-                self._cells[c].has_right_wall = self._break_entrance_and_exit(self._cells[c].has_right_wall)
-            self._draw_cell(self._cells[c])
+        self._break_entrance_and_exit()
+
+        for c in self._cells:
+            self._draw_cell(c)
 
     def _draw_cell(self, c):
         self.win.draw_cell(c)
@@ -114,10 +110,12 @@ class Maze:
 
     def _animate(self):
         win.redraw()
-        time.sleep(0.05)
+        time.sleep(0.02)
 
-    def _break_entrance_and_exit(self, wall):
-        wall = False
+    def _break_entrance_and_exit(self):
+        cells_len = len(self._cells)
+        self._cells[0].has_left_wall = False
+        self._cells[cells_len-1].has_right_wall = False
 
     def _break_walls_r(self):
         print("s")
