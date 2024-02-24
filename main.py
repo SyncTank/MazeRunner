@@ -78,19 +78,19 @@ class Cell:
 
 
 class Maze:
-    def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win):
+    def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, window, seed=None):
         self.x1 = x1
         self.y1 = y1
         self.num_rows = num_rows
         self.num_cols = num_cols
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
-        self.win = win
+        self.win = window
         self._cells = []
-        self._create_cells()
-        self.seed = None
+        self.seed = seed # if not defined it uses system's time
         if self.seed is not None:
             random.seed(self.seed)
+        self._create_cells()
 
     def _create_cells(self):
         for col in range(self.num_cols):
@@ -100,6 +100,7 @@ class Maze:
                 self._cells.append(Cell(firstpoint, secondpoint, self.win))
 
         self._break_entrance_and_exit()
+        self._break_walls_r()
 
         for c in self._cells:
             self._draw_cell(c)
@@ -109,16 +110,22 @@ class Maze:
         self._animate()
 
     def _animate(self):
-        win.redraw()
-        time.sleep(0.02)
+        self.win.redraw()
+        #time.sleep(0.02)
 
     def _break_entrance_and_exit(self):
         cells_len = len(self._cells)
         self._cells[0].has_left_wall = False
+        self._cells[0].has_right_wall = False
+        self._cells[0].has_bottom_wall = False
         self._cells[cells_len-1].has_right_wall = False
+        self._cells[cells_len - 1].has_top_wall = False
+        self._cells[cells_len - 1].has_left_wall = False
 
     def _break_walls_r(self):
-        print("s")
+        self._cells[0].visited = True
+        for cell in self._cells:
+            print(cell.visited)
 
 
 #region graph
@@ -129,8 +136,6 @@ class Maze:
 #           bottom_list.append(Point((c * 50) + 50, 100 + (50 * r)))
 #   return top_list, bottom_list
 #endregion
-
-win = MainWindow(1200, 720)
 
 #region basic graph
 #top_list = []
@@ -152,6 +157,13 @@ win = MainWindow(1200, 720)
 # cells[0].draw_move(cells[1])
 # cells[0].draw_move(cells[10], True)
 
-maze = Maze(50, 50, 10, 14, 2, 2, win)
+def main():
 
-win.wait_for_close()
+    win = MainWindow(1200, 720)
+    maze = Maze(50, 50, 10, 14, 2, 2, win, 5)
+
+    win.wait_for_close()
+
+main()
+
+
