@@ -85,5 +85,5 @@ class Maze:
         self._draw_cell(self._cells[col_length-1][row_length-1])
 
     def _break_walls_r(self):
-        # self._cells[0].visited = True
+        self._cells[0].visited = True
         pass
