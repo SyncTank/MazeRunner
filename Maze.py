@@ -17,13 +17,13 @@ class Cell:
         self._win = window
         self.visited = False
 
-    def draw_move(self, to_cell, undo=False):
+    def draw_move(self, to_cell, undo=False) -> None:
         if undo:
             self._win.draw_line(Line(self.cell_center, to_cell.cell_center), "grey")
         else:
             self._win.draw_line(Line(self.cell_center, to_cell.cell_center), "red")
 
-    def draw(self, colour="black"):
+    def draw(self, colour="black") -> None:
         color_or_white = colour if self.has_left_wall else "white"
         self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x1, self._y2)), color_or_white)
 
@@ -55,7 +55,6 @@ class Maze:
         self._break_entrance_and_exit()
 
     def _create_cells(self):
-
         for I in range(self.num_cols):
             col = []
             for J in range(self.num_rows):
@@ -65,25 +64,34 @@ class Maze:
                 point2 = Point((self.x1 + self.x1 + self.x1 * I) * self.cell_size_x,
                                (self.y1 + self.y1 + self.y1 * J) * self.cell_size_y)
                 col.append(Cell(point1, point2, self.win))
-                self._draw_cell(col[J])
             self._cells.append(col)
 
-    def _draw_cell(self, c):
+        for I in range(self.num_cols):
+            for J in range(self.num_rows):
+                self._draw_cell(self._cells[I][J])
+                self._break_walls_r(I, J)
+
+    def _draw_cell(self, c) -> None:
         c.draw()
         self._animate()
 
-    def _animate(self):
+    def _animate(self) -> None:
         self.win.redraw()
-        #time.sleep(0.02)
+        # time.sleep(0.02)
 
-    def _break_entrance_and_exit(self):
+    def _break_entrance_and_exit(self) -> None:
         col_length = len(self._cells)
         row_length = len(self._cells[0])
         self._cells[0][0].has_top_wall = False
         self._draw_cell(self._cells[0][0])
         self._cells[col_length - 1][row_length - 1].has_bottom_wall = False
-        self._draw_cell(self._cells[col_length-1][row_length-1])
+        self._draw_cell(self._cells[col_length - 1][row_length - 1])
 
-    def _break_walls_r(self):
-        self._cells[0].visited = True
-        pass
+    def _break_walls_r(self, I: int, J: int) -> None:
+        # self._cells[0].visited = True
+        while True:
+            to_visit = []
+            zero = True
+
+            if zero:
+                return
