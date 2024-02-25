@@ -24,14 +24,17 @@ class Cell:
             self._win.draw_line(Line(self.cell_center, to_cell.cell_center), "red")
 
     def draw(self, colour="black"):
-        if self.has_left_wall:
-            self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x1, self._y2)), colour)
-        if self.has_right_wall:
-            self._win.draw_line(Line(Point(self._x2, self._y1), Point(self._x2, self._y2)), colour)
-        if self.has_top_wall:
-            self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x2, self._y1)), colour)
-        if self.has_bottom_wall:
-            self._win.draw_line(Line(Point(self._x1, self._y2), Point(self._x2, self._y2)), colour)
+        color_or_white = colour if self.has_left_wall else "white"
+        self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x1, self._y2)), color_or_white)
+
+        color_or_white = colour if self.has_right_wall else "white"
+        self._win.draw_line(Line(Point(self._x2, self._y1), Point(self._x2, self._y2)), color_or_white)
+
+        color_or_white = colour if self.has_top_wall else "white"
+        self._win.draw_line(Line(Point(self._x1, self._y1), Point(self._x2, self._y1)), color_or_white)
+
+        color_or_white = colour if self.has_bottom_wall else "white"
+        self._win.draw_line(Line(Point(self._x1, self._y2), Point(self._x2, self._y2)), color_or_white)
 
 
 class Maze:
@@ -71,14 +74,15 @@ class Maze:
 
     def _animate(self):
         self.win.redraw()
-        time.sleep(0.02)
+        #time.sleep(0.02)
 
     def _break_entrance_and_exit(self):
-        cells_len = len(self._cells)
-        # self._cells[0].has_top_wall = False
-        # self._draw_cell(self._cells[0], "red")
-        # self._cells[cells_len - 1].has_bottom_wall = False
-        # self._draw_cell(self._cells[cells_len - 1], "white")
+        col_length = len(self._cells)
+        row_length = len(self._cells[0])
+        self._cells[0][0].has_top_wall = False
+        self._draw_cell(self._cells[0][0])
+        self._cells[col_length - 1][row_length - 1].has_bottom_wall = False
+        self._draw_cell(self._cells[col_length-1][row_length-1])
 
     def _break_walls_r(self):
         # self._cells[0].visited = True
