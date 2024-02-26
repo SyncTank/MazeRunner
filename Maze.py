@@ -64,11 +64,12 @@ class Maze:
                 point2 = Point((self.x1 + self.x1 + self.x1 * I) * self.cell_size_x,
                                (self.y1 + self.y1 + self.y1 * J) * self.cell_size_y)
                 col.append(Cell(point1, point2, self.win))
+                self._draw_cell(col[J])
             self._cells.append(col)
 
-        for I in range(self.num_cols):
-            for J in range(self.num_rows):
-                self._draw_cell(self._cells[I][J])
+        for I in range(len(self._cells)-1):
+            for J in range(len(self._cells[I])-1):
+                #self._draw_cell(self._cells[I][J])
                 self._break_walls_r(I, J)
 
     def _draw_cell(self, c) -> None:
@@ -88,10 +89,11 @@ class Maze:
         self._draw_cell(self._cells[col_length - 1][row_length - 1])
 
     def _break_walls_r(self, I: int, J: int) -> None:
-        # self._cells[0].visited = True
+        self._cells[I][J].visited = True
         while True:
             to_visit = []
-            zero = True
-
-            if zero:
-                return
+            possible_move = []
+            if self._cells[I][J] or self._cells[I][J] or self._cells[I-1][J] or self._cells[I][J-1]:
+                #print(self._cells[I+1][J], self._cells[I][J+1], self._cells[I-1][J], self._cells[I][J-1])
+                pass
+            break
