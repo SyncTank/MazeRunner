@@ -13,6 +13,7 @@ class Cell:
         self._x2 = p2.x
         self._y1 = p1.y
         self._y2 = p2.y
+        self.values = (p1.x, p1.y, p2.x, p2.y)
         self.cell_center = Point((self._x1 + self._x2) / 2, (self._y1 + self._y2) / 2)
         self._win = window
         self.visited = False
@@ -53,6 +54,7 @@ class Maze:
 
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r(random.randrange(0, self.num_cols), random.randrange(0, self.num_rows))
 
     def _create_cells(self):
         for I in range(self.num_cols):
@@ -66,11 +68,6 @@ class Maze:
                 col.append(Cell(point1, point2, self.win))
                 self._draw_cell(col[J])
             self._cells.append(col)
-
-        for I in range(len(self._cells)-1):
-            for J in range(len(self._cells[I])-1):
-                #self._draw_cell(self._cells[I][J])
-                self._break_walls_r(I, J)
 
     def _draw_cell(self, c) -> None:
         c.draw()
@@ -93,7 +90,7 @@ class Maze:
         while True:
             to_visit = []
             possible_move = []
-            if self._cells[I][J] or self._cells[I][J] or self._cells[I-1][J] or self._cells[I][J-1]:
-                #print(self._cells[I+1][J], self._cells[I][J+1], self._cells[I-1][J], self._cells[I][J-1])
-                pass
+            if self._cells[I][J]:
+                print(self._cells[I][J].values, self._cells[I][J].visited)
+
             break

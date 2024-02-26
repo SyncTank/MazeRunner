@@ -33,7 +33,7 @@ from Maze import Maze
 
 def main():
     win = MainWindow(1200, 720)
-    maze = Maze(5, 5, 10, 14, 10, 10, win, 5)
+    maze = Maze(5, 5, 10, 14, 10, 10, win, 6)
     win.wait_for_close()
 
 
