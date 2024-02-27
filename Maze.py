@@ -9,10 +9,10 @@ class Cell:
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
-        self._x1 = p1.x
-        self._x2 = p2.x
-        self._y1 = p1.y
-        self._y2 = p2.y
+        self._x1: int = p1.x
+        self._x2: int = p2.x
+        self._y1: int = p1.y
+        self._y2: int = p2.y
         self.values = (p1.x, p1.y, p2.x, p2.y)
         self.cell_center = Point((self._x1 + self._x2) / 2, (self._y1 + self._y2) / 2)
         self._win = window
@@ -40,15 +40,15 @@ class Cell:
 
 class Maze:
     def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, window, seed=None):
-        self.x1 = x1
-        self.y1 = y1
-        self.num_rows = num_rows
-        self.num_cols = num_cols
-        self.cell_size_x = cell_size_x
-        self.cell_size_y = cell_size_y
+        self.x1: int = x1
+        self.y1: int = y1
+        self.num_rows: int = num_rows
+        self.num_cols: int = num_cols
+        self.cell_size_x: int = cell_size_x
+        self.cell_size_y: int = cell_size_y
         self.win = window
         self._cells = []
-        self.seed = seed  # if not defined it uses system's time
+        self.seed: int = seed  # if not defined it uses system's time
         if self.seed is not None:
             random.seed(self.seed)
 
@@ -89,21 +89,32 @@ class Maze:
         self._cells[I][J].visited = True
         while True:
             to_visit = []
-            if self._cells[I + 1][J] and self._cells[I + 1][J].visited is not True:
-                to_visit.append((I + 1, J))
-            if self._cells[I - 1][J] and self._cells[I - 1][J].visited is not True:
-                to_visit.append((I - 1, J))
-            if self._cells[I][J + 1] and self._cells[I][J + 1].visited is not True:
-                to_visit.append((I, J + 1))
-            if self._cells[I][J - 1] and self._cells[I][J - 1].visited is not True:
-                to_visit.append((I, J - 1))
 
-            print(I, J)
-            for item in to_visit:
-                print(item)
 
-            possible_move = []
-            if self._cells[I][J]:
-                print(self._cells[I][J].values, self._cells[I][J].visited)
 
-            break
+            if self._cells[I + 1][J] is not None and self._cells[I + 1][J].visited is not True:
+                to_visit.append((I + 1, J, "above"))
+            if self._cells[I - 1][J] is not None and self._cells[I - 1][J].visited is not True:
+                to_visit.append((I - 1, J, "below"))
+            if self._cells[I][J + 1] is not None and self._cells[I][J + 1].visited is not True:
+                to_visit.append((I, J + 1, "right"))
+            if self._cells[I][J - 1] is not None and self._cells[I][J - 1].visited is not True:
+                to_visit.append((I, J - 1, "left"))
+
+            if to_visit is None:
+                self._draw_cell(self._cells[I][J])
+                return
+            else:
+                ran_to: int = random.randrange(0, len(to_visit)-1)
+                set_items = to_visit[ran_to]
+
+                if set_items[2] is "above":
+                    self._cells[I][J].has_top_wall = False
+                elif set_items[2] is "below":
+                    self._cells[I][J].has_bottom_wall = False
+                elif set_items[2] is "right":
+                    self._cells[I][J].has_right_wall = False
+                elif set_items[2] is "left":
+                    self._cells[I][J].has_left_wall = False
+
+                self._break_walls_r(set_items[0], set_items[1])
