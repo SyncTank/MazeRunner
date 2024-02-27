@@ -54,6 +54,7 @@ class Maze:
 
         self._create_cells()
         self._break_entrance_and_exit()
+        print(self.num_rows, self.num_cols)
         self._break_walls_r(random.randrange(0, self.num_cols), random.randrange(0, self.num_rows))
 
     def _create_cells(self):
@@ -89,23 +90,21 @@ class Maze:
         self._cells[I][J].visited = True
         while True:
             to_visit = []
+            if I+1 < self.num_cols and I-1 >= 0 and J+1 < self.num_rows and J-1 >= 0:
+                if self._cells[I + 1][J] is not None and self._cells[I + 1][J].visited is not True:
+                    to_visit.append((I + 1, J, "above"))
+                if self._cells[I - 1][J] is not None and self._cells[I - 1][J].visited is not True:
+                    to_visit.append((I - 1, J, "below"))
+                if self._cells[I][J + 1] is not None and self._cells[I][J + 1].visited is not True:
+                    to_visit.append((I, J + 1, "right"))
+                if self._cells[I][J - 1] is not None and self._cells[I][J - 1].visited is not True:
+                    to_visit.append((I, J - 1, "left"))
 
-
-
-            if self._cells[I + 1][J] is not None and self._cells[I + 1][J].visited is not True:
-                to_visit.append((I + 1, J, "above"))
-            if self._cells[I - 1][J] is not None and self._cells[I - 1][J].visited is not True:
-                to_visit.append((I - 1, J, "below"))
-            if self._cells[I][J + 1] is not None and self._cells[I][J + 1].visited is not True:
-                to_visit.append((I, J + 1, "right"))
-            if self._cells[I][J - 1] is not None and self._cells[I][J - 1].visited is not True:
-                to_visit.append((I, J - 1, "left"))
-
-            if to_visit is None:
+            if len(to_visit) == 0:
                 self._draw_cell(self._cells[I][J])
                 return
             else:
-                ran_to: int = random.randrange(0, len(to_visit)-1)
+                ran_to: int = random.randrange(0, len(to_visit))
                 set_items = to_visit[ran_to]
 
                 if set_items[2] is "above":
@@ -118,3 +117,4 @@ class Maze:
                     self._cells[I][J].has_left_wall = False
 
                 self._break_walls_r(set_items[0], set_items[1])
+
