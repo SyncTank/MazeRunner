@@ -89,6 +89,19 @@ class Maze:
         self._cells[I][J].visited = True
         while True:
             to_visit = []
+            if self._cells[I + 1][J] and self._cells[I + 1][J].visited is not True:
+                to_visit.append((I + 1, J))
+            if self._cells[I - 1][J] and self._cells[I - 1][J].visited is not True:
+                to_visit.append((I - 1, J))
+            if self._cells[I][J + 1] and self._cells[I][J + 1].visited is not True:
+                to_visit.append((I, J + 1))
+            if self._cells[I][J - 1] and self._cells[I][J - 1].visited is not True:
+                to_visit.append((I, J - 1))
+
+            print(I, J)
+            for item in to_visit:
+                print(item)
+
             possible_move = []
             if self._cells[I][J]:
                 print(self._cells[I][J].values, self._cells[I][J].visited)
