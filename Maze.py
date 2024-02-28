@@ -59,16 +59,16 @@ class Maze:
         self._reset_cells_visited()
 
     def _create_cells(self):
-        for I in range(self.num_cols):
+        for col_Value in range(self.num_cols):
             col = []
-            for J in range(self.num_rows):
-                point1 = Point((self.x1 + self.x1 * I) * self.cell_size_x,
-                               (self.y1 + self.y1 * J) * self.cell_size_y)
+            for row_Value in range(self.num_rows):
+                point1 = Point((self.x1 + self.x1 * col_Value) * self.cell_size_x,
+                               (self.y1 + self.y1 * row_Value) * self.cell_size_y)
 
-                point2 = Point((self.x1 + self.x1 + self.x1 * I) * self.cell_size_x,
-                               (self.y1 + self.y1 + self.y1 * J) * self.cell_size_y)
+                point2 = Point((self.x1 + self.x1 + self.x1 * col_Value) * self.cell_size_x,
+                               (self.y1 + self.y1 + self.y1 * row_Value) * self.cell_size_y)
                 col.append(Cell(point1, point2, self.win))
-                self._draw_cell(col[J])
+                self._draw_cell(col[row_Value])
             self._cells.append(col)
 
     def _draw_cell(self, c) -> None:
@@ -87,27 +87,27 @@ class Maze:
         self._cells[col_length - 1][row_length - 1].has_bottom_wall = False
         self._draw_cell(self._cells[col_length - 1][row_length - 1])
 
-    def break_walls(self, I: int, J: int, TO_Col: int, TO_row: int) -> None:
-        movement = (I - TO_Col, J - TO_row)
-        # print(f"movement: {movement}, {I}, {TO_Col}, {J}, {TO_row}")
+    def break_walls(self, col_Value: int, row_Value: int, TO_Col: int, TO_row: int) -> None:
+        movement = (col_Value - TO_Col, row_Value - TO_row)
+        # print(f"movement: {movement}, {col_Value}, {TO_Col}, {row_Value}, {TO_row}")
         match movement:
             case (-1, 0):
-                self._cells[I][J].has_right_wall = False
+                self._cells[col_Value][row_Value].has_right_wall = False
                 self._cells[TO_Col][TO_row].has_left_wall = False
                 # print("right")
                 return
             case (1, 0):
-                self._cells[I][J].has_left_wall = False
+                self._cells[col_Value][row_Value].has_left_wall = False
                 self._cells[TO_Col][TO_row].has_right_wall = False
                 # print("left")
                 return
             case (0, 1):
-                self._cells[I][J].has_top_wall = False
+                self._cells[col_Value][row_Value].has_top_wall = False
                 self._cells[TO_Col][TO_row].has_bottom_wall = False
                 # print("up")
                 return
             case (0, -1):
-                self._cells[I][J].has_bottom_wall = False
+                self._cells[col_Value][row_Value].has_bottom_wall = False
                 self._cells[TO_Col][TO_row].has_top_wall = False
                 # print("down")
                 return
@@ -115,32 +115,32 @@ class Maze:
                 print("Something went wrong")
                 return
 
-    def _break_walls_r(self, I: int, J: int) -> None:
-        self._cells[I][J].visited = True
+    def _break_walls_r(self, col_Value: int, row_Value: int) -> None:
+        self._cells[col_Value][row_Value].visited = True
         while True:
             vist_list = []
 
-            if J + 1 < self.num_rows:
-                if not self._cells[I][J + 1].visited:
-                    vist_list.append((I, J + 1))
-            if J - 1 >= 0:
-                if not self._cells[I][J - 1].visited:
-                    vist_list.append((I, J - 1))
-            if I + 1 < self.num_cols:
-                if not self._cells[I + 1][J].visited:
-                    vist_list.append((I + 1, J))
-            if I - 1 >= 0:
-                if not self._cells[I - 1][J].visited:
-                    vist_list.append((I - 1, J))
+            if row_Value + 1 < self.num_rows:
+                if not self._cells[col_Value][row_Value + 1].visited:
+                    vist_list.append((col_Value, row_Value + 1))
+            if row_Value - 1 >= 0:
+                if not self._cells[col_Value][row_Value - 1].visited:
+                    vist_list.append((col_Value, row_Value - 1))
+            if col_Value + 1 < self.num_cols:
+                if not self._cells[col_Value + 1][row_Value].visited:
+                    vist_list.append((col_Value + 1, row_Value))
+            if col_Value - 1 >= 0:
+                if not self._cells[col_Value - 1][row_Value].visited:
+                    vist_list.append((col_Value - 1, row_Value))
 
             if len(vist_list) == 0:
-                self._draw_cell(self._cells[I][J])
+                self._draw_cell(self._cells[col_Value][row_Value])
                 return
             else:
                 direction_to_move = random.randrange(0, len(vist_list))
                 moving = vist_list[direction_to_move - 1]
 
-            self.break_walls(I, J, moving[0], moving[1])
+            self.break_walls(col_Value, row_Value, moving[0], moving[1])
 
             self._break_walls_r(moving[0], moving[1])
 
