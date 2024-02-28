@@ -34,6 +34,7 @@ from Maze import Maze
 def main():
     win = MainWindow(1200, 720)
     maze = Maze(5, 5, 10, 14, 10, 10, win, 200)
+    maze.solve()
     win.wait_for_close()
 
 

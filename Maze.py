@@ -9,6 +9,8 @@ class Cell:
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
+        self.wall_direction = [[(0, 1), self.has_top_wall], [(0, -1), self.has_bottom_wall],
+                               [(-1, 0), self.has_left_wall], [(1, 0), self.has_right_wall]]
         self._x1: int = p1.x
         self._x2: int = p2.x
         self._y1: int = p1.y
@@ -47,8 +49,9 @@ class Maze:
         self.cell_size_x: int = cell_size_x
         self.cell_size_y: int = cell_size_y
         self.win = window
-        self._cells = []
+        self._cells: list = []
         self.seed: int = seed  # if not defined it uses system's time
+        self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         if self.seed is not None:
             random.seed(self.seed)
 
@@ -71,7 +74,7 @@ class Maze:
                 self._draw_cell(col[row_Value])
             self._cells.append(col)
 
-    def _draw_cell(self, c) -> None:
+    def _draw_cell(self, c: Cell) -> None:
         c.draw()
         self._animate()
 
@@ -144,7 +147,35 @@ class Maze:
 
             self._break_walls_r(moving[0], moving[1])
 
-    def _reset_cells_visited(self):
+    def _reset_cells_visited(self) -> None:
         for col in range(0, self.num_cols):
             for row in range(0, self.num_rows):
                 self._cells[col][row].visited = False
+
+    def solve(self) -> None:
+        self._solve_dfs_r(0, 0)
+
+    def _solve_dfs_r(self, start_X: int, start_Y: int) -> bool:
+        self._animate()
+        self._cells[start_X][start_Y].visited = True
+        if self._cells[start_X][start_Y] == self._cells[self.num_cols - 1][self.num_rows - 1]:
+            return True
+
+        for axis in self.directions:
+            x, y = start_X + axis[0], start_Y + axis[1]
+            print(axis)
+            print(self._cells[start_X + axis[0]][start_Y + axis[1]])
+            if self._cells[x][y] and self._cells[x][y].visited is False:
+                match axis:
+                    case (1, 0):
+                        print(x, y)
+                    case (-1, 0):
+                        print(x, y)
+                    case (0, 1):
+                        print(x, y)
+                    case (0, -1):
+                        print(x, y)
+            else:
+                self._cells[start_X][start_Y].draw_move(self._cells[x][y], True)
+
+        return False
