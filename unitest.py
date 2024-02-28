@@ -5,19 +5,26 @@ from Maze import Maze
 
 
 class Tests(unittest.TestCase):
+    def setUp(self):
+        self.window = MainWindow(None, None)
+        self.num_cols = 14
+        self.num_rows = 10
+        self.m1 = m1 = Maze(5, 5, self.num_rows, self.num_cols, 10, 10, self.window, 200)
+
     def test_maze_create_cells(self):
-        window = MainWindow(None, None)
-        num_cols = 12
-        num_rows = 10
-        m1 = Maze(5, 5, num_rows, num_cols, 10, 10, window, 200)
         self.assertEqual(
-            len(m1._cells),
-            num_cols,
+            len(self.m1._cells),
+            self.num_cols,
         )
         self.assertEqual(
-            len(m1._cells[0]),
-            num_rows,
+            len(self.m1._cells[0]),
+            self.num_rows,
         )
+
+    def test_all_cells_not_visited(self):
+        for col in range(0, self.num_cols):
+            for row in range(0, self.num_rows):
+                self.assertFalse(self.m1._cells[col][row].visited)
 
         if __name__ == "__main__":
             unittest.main()
