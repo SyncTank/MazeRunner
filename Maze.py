@@ -88,27 +88,27 @@ class Maze:
 
     def break_walls(self, I: int, J: int, TO_Col: int, TO_row: int) -> None:
         movement = (I - TO_Col, J - TO_row)
-        print(f"movement: {movement}, {I}, {TO_Col}, {J}, {TO_row}")
+        #print(f"movement: {movement}, {I}, {TO_Col}, {J}, {TO_row}")
         match movement:
             case (-1, 0):
                 self._cells[I][J].has_right_wall = False
                 self._cells[TO_Col][TO_row].has_left_wall = False
-                print("right")
+                #print("right")
                 return
             case (1, 0):
                 self._cells[I][J].has_left_wall = False
                 self._cells[TO_Col][TO_row].has_right_wall = False
-                print("left")
+                #print("left")
                 return
             case (0, 1):
                 self._cells[I][J].has_top_wall = False
                 self._cells[TO_Col][TO_row].has_bottom_wall = False
-                print("up")
+                #print("up")
                 return
             case (0, -1):
                 self._cells[I][J].has_bottom_wall = False
                 self._cells[TO_Col][TO_row].has_top_wall = False
-                print("down")
+                #print("down")
                 return
             case _:
                 print("Something went wrong")
