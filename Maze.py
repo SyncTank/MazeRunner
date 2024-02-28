@@ -56,6 +56,7 @@ class Maze:
         self._break_entrance_and_exit()
         print(self.num_rows, self.num_cols)
         self._break_walls_r(random.randrange(0, self.num_cols), random.randrange(0, self.num_rows))
+        self._reset_cells_visited()
 
     def _create_cells(self):
         for I in range(self.num_cols):
@@ -88,27 +89,27 @@ class Maze:
 
     def break_walls(self, I: int, J: int, TO_Col: int, TO_row: int) -> None:
         movement = (I - TO_Col, J - TO_row)
-        #print(f"movement: {movement}, {I}, {TO_Col}, {J}, {TO_row}")
+        # print(f"movement: {movement}, {I}, {TO_Col}, {J}, {TO_row}")
         match movement:
             case (-1, 0):
                 self._cells[I][J].has_right_wall = False
                 self._cells[TO_Col][TO_row].has_left_wall = False
-                #print("right")
+                # print("right")
                 return
             case (1, 0):
                 self._cells[I][J].has_left_wall = False
                 self._cells[TO_Col][TO_row].has_right_wall = False
-                #print("left")
+                # print("left")
                 return
             case (0, 1):
                 self._cells[I][J].has_top_wall = False
                 self._cells[TO_Col][TO_row].has_bottom_wall = False
-                #print("up")
+                # print("up")
                 return
             case (0, -1):
                 self._cells[I][J].has_bottom_wall = False
                 self._cells[TO_Col][TO_row].has_top_wall = False
-                #print("down")
+                # print("down")
                 return
             case _:
                 print("Something went wrong")
@@ -137,8 +138,13 @@ class Maze:
                 return
             else:
                 direction_to_move = random.randrange(0, len(vist_list))
-                moving = vist_list[direction_to_move-1]
+                moving = vist_list[direction_to_move - 1]
 
             self.break_walls(I, J, moving[0], moving[1])
 
             self._break_walls_r(moving[0], moving[1])
+
+    def _reset_cells_visited(self):
+        for col in range(0, self.num_cols):
+            for row in range(0, self.num_rows):
+                self._cells[col][row].visited = False
