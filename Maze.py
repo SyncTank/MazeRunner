@@ -76,7 +76,7 @@ class Maze:
 
     def _animate(self) -> None:
         self.win.redraw()
-        # time.sleep(0.02)
+        # time.sleep(0.05)
 
     def _break_entrance_and_exit(self) -> None:
         col_length = len(self._cells)
@@ -86,35 +86,59 @@ class Maze:
         self._cells[col_length - 1][row_length - 1].has_bottom_wall = False
         self._draw_cell(self._cells[col_length - 1][row_length - 1])
 
+    def break_walls(self, I: int, J: int, TO_Col: int, TO_row: int) -> None:
+        movement = (I - TO_Col, J - TO_row)
+        print(f"movement: {movement}, {I}, {TO_Col}, {J}, {TO_row}")
+        match movement:
+            case (-1, 0):
+                self._cells[I][J].has_right_wall = False
+                self._cells[TO_Col][TO_row].has_left_wall = False
+                print("right")
+                return
+            case (1, 0):
+                self._cells[I][J].has_left_wall = False
+                self._cells[TO_Col][TO_row].has_right_wall = False
+                print("left")
+                return
+            case (0, 1):
+                self._cells[I][J].has_top_wall = False
+                self._cells[TO_Col][TO_row].has_bottom_wall = False
+                print("up")
+                return
+            case (0, -1):
+                self._cells[I][J].has_bottom_wall = False
+                self._cells[TO_Col][TO_row].has_top_wall = False
+                print("down")
+                return
+            case _:
+                print("Something went wrong")
+                return
+
     def _break_walls_r(self, I: int, J: int) -> None:
         self._cells[I][J].visited = True
         while True:
-            to_visit = []
-            if I+1 < self.num_cols and I-1 >= 0 and J+1 < self.num_rows and J-1 >= 0:
-                if self._cells[I + 1][J] is not None and self._cells[I + 1][J].visited is not True:
-                    to_visit.append((I + 1, J, "above"))
-                if self._cells[I - 1][J] is not None and self._cells[I - 1][J].visited is not True:
-                    to_visit.append((I - 1, J, "below"))
-                if self._cells[I][J + 1] is not None and self._cells[I][J + 1].visited is not True:
-                    to_visit.append((I, J + 1, "right"))
-                if self._cells[I][J - 1] is not None and self._cells[I][J - 1].visited is not True:
-                    to_visit.append((I, J - 1, "left"))
+            vist_list = []
 
-            if len(to_visit) == 0:
+            if J + 1 < self.num_rows:
+                if not self._cells[I][J + 1].visited:
+                    vist_list.append((I, J + 1))
+            if J - 1 >= 0:
+                if not self._cells[I][J - 1].visited:
+                    vist_list.append((I, J - 1))
+            if I + 1 < self.num_cols:
+                if not self._cells[I + 1][J].visited:
+                    vist_list.append((I + 1, J))
+            if I - 1 >= 0:
+                if not self._cells[I - 1][J].visited:
+                    vist_list.append((I - 1, J))
+
+            if len(vist_list) == 0:
                 self._draw_cell(self._cells[I][J])
                 return
             else:
-                ran_to: int = random.randrange(0, len(to_visit))
-                set_items = to_visit[ran_to]
+                direction_to_move = random.randrange(0, len(vist_list))
+                moving = vist_list[direction_to_move-1]
 
-                if set_items[2] is "above":
-                    self._cells[I][J].has_top_wall = False
-                elif set_items[2] is "below":
-                    self._cells[I][J].has_bottom_wall = False
-                elif set_items[2] is "right":
-                    self._cells[I][J].has_right_wall = False
-                elif set_items[2] is "left":
-                    self._cells[I][J].has_left_wall = False
+            self.break_walls(I, J, moving[0], moving[1])
 
-                self._break_walls_r(set_items[0], set_items[1])
-
+            self._break_walls_r(moving[0], moving[1])
