@@ -9,6 +9,12 @@ class Cell:
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
+        self.directions = {
+            (0, 1): self.has_top_wall,
+            (0, -1): self.has_bottom_wall,
+            (1, 0): self.has_right_wall,
+            (-1, 0): self.has_left_wall
+        }
         self._x1: int = p1.x
         self._x2: int = p2.x
         self._y1: int = p1.y
@@ -48,11 +54,10 @@ class Maze:
         self.cell_size_y: int = cell_size_y
         self.win = window
         self._cells: list = []
-        self.seed: int = seed  # if not defined it uses system's time
         self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        self.seed: int = seed  # if not defined it uses system's time
         if self.seed is not None:
             random.seed(self.seed)
-
         self._create_cells()
         self._break_entrance_and_exit()
         print(self.num_rows, self.num_cols)
@@ -95,21 +100,29 @@ class Maze:
             case (-1, 0):
                 self._cells[col_Value][row_Value].has_right_wall = False
                 self._cells[TO_Col][TO_row].has_left_wall = False
+                self._cells[col_Value][row_Value].directions[(-1, 0)] = False
+                self._cells[TO_Col][TO_row].directions[(1, 0)] = False
                 # print("right")
                 return
             case (1, 0):
                 self._cells[col_Value][row_Value].has_left_wall = False
                 self._cells[TO_Col][TO_row].has_right_wall = False
+                self._cells[col_Value][row_Value].directions[(1, 0)] = False
+                self._cells[TO_Col][TO_row].directions[(-1, 0)] = False
                 # print("left")
                 return
             case (0, 1):
                 self._cells[col_Value][row_Value].has_top_wall = False
                 self._cells[TO_Col][TO_row].has_bottom_wall = False
+                self._cells[col_Value][row_Value].directions[(0, 1)] = False
+                self._cells[TO_Col][TO_row].directions[(0, -1)] = False
                 # print("up")
                 return
             case (0, -1):
                 self._cells[col_Value][row_Value].has_bottom_wall = False
                 self._cells[TO_Col][TO_row].has_top_wall = False
+                self._cells[col_Value][row_Value].directions[(0, -1)] = False
+                self._cells[TO_Col][TO_row].directions[(0, 1)] = False
                 # print("down")
                 return
             case _:
@@ -150,8 +163,8 @@ class Maze:
             for row in range(0, self.num_rows):
                 self._cells[col][row].visited = False
 
-    def solve(self) -> None:
-        self._solve_dfs_r(0, 0)
+    def solve(self) -> bool:
+        return self._solve_dfs_r(0, 0)
 
     def _solve_dfs_r(self, start_X: int, start_Y: int) -> bool:
         self._animate()
@@ -160,17 +173,19 @@ class Maze:
             return True
 
         for dir in self.directions:
-            print(dir, start_X + dir[0], start_Y + dir[1])
-            if self._cells[start_X + dir[0]][start_Y + dir[1]] and self._cells[start_X + dir[0]][start_Y].visited is False:
-                print(dir)
+            new_cell_dir_x = start_X + (-dir[0])
+            new_cell_dir_y = start_Y + (-dir[1])
+            within_cells_x = self.num_cols > new_cell_dir_x >= 0
+            within_cells_y = self.num_rows > new_cell_dir_y >= 0
+            if within_cells_x and within_cells_y and self._cells[new_cell_dir_x][new_cell_dir_y].visited is False and self._cells[start_X][start_Y].directions[dir] is False:
+                self._cells[start_X][start_Y].draw_move(self._cells[new_cell_dir_x][new_cell_dir_y])
+                dfs = self._solve_dfs_r(new_cell_dir_x, new_cell_dir_y)
+                if dfs:
+                    return True
+                else:
+                    self._cells[start_X][start_Y].draw_move(self._cells[new_cell_dir_x][new_cell_dir_y], True)
 
         return False
-
-
-
-
-
-
 
 
 

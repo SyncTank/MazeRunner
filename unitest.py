@@ -26,5 +26,8 @@ class Tests(unittest.TestCase):
             for row in range(0, self.num_rows):
                 self.assertFalse(self.m1._cells[col][row].visited)
 
+    def test_if_maze_solve(self) -> None:
+        self.assertEqual(self.m1.solve(), True)
+
         if __name__ == "__main__":
             unittest.main()
