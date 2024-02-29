@@ -9,8 +9,6 @@ class Cell:
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
-        self.wall_direction = [[(0, 1), self.has_top_wall], [(0, -1), self.has_bottom_wall],
-                               [(-1, 0), self.has_left_wall], [(1, 0), self.has_right_wall]]
         self._x1: int = p1.x
         self._x2: int = p2.x
         self._y1: int = p1.y
@@ -80,7 +78,7 @@ class Maze:
 
     def _animate(self) -> None:
         self.win.redraw()
-        # time.sleep(0.05)
+        #time.sleep(0.05)
 
     def _break_entrance_and_exit(self) -> None:
         col_length = len(self._cells)
@@ -161,21 +159,34 @@ class Maze:
         if self._cells[start_X][start_Y] == self._cells[self.num_cols - 1][self.num_rows - 1]:
             return True
 
-        for axis in self.directions:
-            x, y = start_X + axis[0], start_Y + axis[1]
-            print(axis)
-            print(self._cells[start_X + axis[0]][start_Y + axis[1]])
-            if self._cells[x][y] and self._cells[x][y].visited is False:
-                match axis:
-                    case (1, 0):
-                        print(x, y)
-                    case (-1, 0):
-                        print(x, y)
-                    case (0, 1):
-                        print(x, y)
-                    case (0, -1):
-                        print(x, y)
-            else:
-                self._cells[start_X][start_Y].draw_move(self._cells[x][y], True)
+        for dir in self.directions:
+            print(dir, start_X + dir[0], start_Y + dir[1])
+            if self._cells[start_X + dir[0]][start_Y + dir[1]] and self._cells[start_X + dir[0]][start_Y].visited is False:
+                print(dir)
 
         return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
