@@ -6,6 +6,8 @@ Maze Running in python using Tkinter.
 https://github.com/SyncTank/MazeRunner/assets/30980904/1d34e5ea-54e2-4c84-8772-2a2dd765b5c0
 
 <p> Things to try </p>
-![image](https://github.com/SyncTank/MazeRunner/assets/30980904/53ed42d1-c235-46c7-a4d3-079572f2bfd5)
+
+![firefox_29-14-22-39_2946](https://github.com/SyncTank/MazeRunner/assets/30980904/3e1532ec-50dd-4628-89ea-fc068428fe05)
+
 
 
